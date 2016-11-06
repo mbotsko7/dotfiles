@@ -1,4 +1,4 @@
-#!/usr/local/bin/fish
+#!/usr/bin/fish
 
 alias gpo "git push origin"
 funcsave gpo
