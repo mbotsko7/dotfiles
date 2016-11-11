@@ -22,3 +22,7 @@ alias gaa "git add ."
 funcsave gaa
 alias gcb "git checkout -b"
 funcsave gcb
+alias pbcopy='xsel --clipboard --input'
+funcsave pbcopy
+alias pbpaste='xsel --clipboard --output'
+funcsave pbpaste
