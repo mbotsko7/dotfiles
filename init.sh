@@ -26,3 +26,5 @@ alias pbcopy='xsel --clipboard --input'
 funcsave pbcopy
 alias pbpaste='xsel --clipboard --output'
 funcsave pbpaste
+alias kernel='uname -r'
+funcsave kernel
