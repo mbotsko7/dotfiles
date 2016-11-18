@@ -2,8 +2,8 @@
 
 alias gpo "git push origin"
 funcsave gpo
-alias gp "git push origin HEAD"
-funcsave gp
+alias gpoh "git push origin HEAD"
+funcsave gpoh
 alias gp "git pull"
 funcsave gp
 alias gf "git fetch"
