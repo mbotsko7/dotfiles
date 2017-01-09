@@ -30,3 +30,5 @@ alias pbpaste='xsel --clipboard --output'
 funcsave pbpaste
 alias kernel='uname -r'
 funcsave kernel
+alias cpu='watch -n 0.4 grep \"cpu MHz\" /proc/cpuinfo'
+funcsave cpu
