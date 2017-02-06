@@ -34,3 +34,5 @@ alias cpu='watch -n 0.4 grep \"cpu MHz\" /proc/cpuinfo'
 funcsave cpu
 alias governor='cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor'
 funcsave governor
+alias governor-set="sudo cpufreq-set -c 0 -g"
+funcsave governor-set
