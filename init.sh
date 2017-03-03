@@ -1,5 +1,3 @@
-#!/usr/bin/fish
-
 alias gpo "git push origin"
 funcsave gpo
 alias gpoh "git push origin HEAD"
@@ -22,7 +20,7 @@ alias ga "git add"
 funcsave ga
 alias gaa "git add ."
 funcsave gaa
-alias gcb "git checkout -b"
+alias gcb "git checkout"
 funcsave gcb
 alias pbcopy='xsel --clipboard --input'
 funcsave pbcopy
