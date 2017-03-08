@@ -34,3 +34,5 @@ alias governor='cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor'
 funcsave governor
 alias governor-set="sudo cpufreq-set -c 0 -g"
 funcsave governor-set
+alias wifi="sudo service network-manager restart"
+funcsave wifi
