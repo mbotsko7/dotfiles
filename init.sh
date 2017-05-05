@@ -6,6 +6,10 @@ alias gp "git pull origin HEAD"
 funcsave gp
 alias gf "git fetch --all"
 funcsave gf
+function setupstream
+    git branch --set-upstream-to=origin/(git rev-parse --abbrev-ref HEAD) (git rev-parse --abbrev-ref HEAD)
+end
+funcsave setupstream
 alias gc "git commit"
 funcsave gc
 alias gca "git add .; and git commit"
