@@ -23,4 +23,5 @@ alias gaa "git add ."
 funcsave gaa
 alias gcb "git checkout"
 funcsave gcb
-
+alias gl "git log"
+funcsave gl
