@@ -1,9 +1,3 @@
-# Application launch aliases
-alias chrome "google-chrome-desktop &"
-funcsave chrome
-alias gmusic "google-play-music-desktop-player &"
-funcsave gmusic
-
 # Git specific
 alias gpo "git push origin"
 funcsave gpo
