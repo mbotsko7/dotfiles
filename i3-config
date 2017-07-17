@@ -188,8 +188,8 @@ bindsym $mod+q exec dmenu_run
 
 client.focused #660000 #660000 #ffffff #660000 #660000a
 
-bindsym $mod+p exec "sudo pm-suspend"
-bindsym $mod+o exec "sudo hibernate"
+bindsym $mod+p exec "gksu pm-suspend"
+bindsym $mod+o exec "gksu hibernate"
 
 bindsym $mod+t exec i3-input -F 'rename workspace to "%s"' -P 'New Name: '
 
