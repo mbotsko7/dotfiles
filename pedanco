@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+PROJECT_DIR=/home/julian/Code
+DEFUALT_NAME=pedanco
+PROJECT_NAME=${1-$DEFUALT_NAME}
+cd $PROJECT_DIR
+
+tmux has-session -t $PROJECT_NAME 4>/dev/null
+
+if [ "$?" -eq 1 ] ; then
+    # Create New Session
+    tmux new-session -d -s "$PROJECT_NAME"
+
+    # Pane 2 is foreman and runners
+    tmux split-window -h -c $PROJECT_DIR/pedanco
+    tmux resize-pane -t 2 -x 60
+
+    # Split pane 2 into several sub segments
+    tmux split-window -t 2 -v -c $PROJECT_DIR/elasticsearch
+    tmux split-window -t 2 -v -c $PROJECT_DIR/wopr-stats
+    tmux split-window -t 2 -v -c $PROJECT_DIR/wopr-stats
+
+    # Setup virtualenv, gulp and server
+    tmux send-keys -t 2 'nvm use default; foreman start -p 5000' Enter
+    tmux send-keys -t 5 'rvm use 2.2.3; foreman start -p 5001' Enter
+    tmux send-keys -t 4 'rvm use 2.2.3; env WORKERS=ConversationEventWorker rake sneakers:run' Enter
+    tmux send-keys -t 3 './bin/elasticsearch' Enter
+
+    # Focus on pane 1
+    tmux select-pane -t 1
+
+    # Rename the Window
+    tmux rename-window "$PROJECT_NAME dashboard"
+    
+    
+fi
+
+tmux -2 attach-session -d -t "$PROJECT_NAME"
