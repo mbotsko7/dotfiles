@@ -36,6 +36,12 @@ sudo -- sh -c 'echo "deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME='
 sudo apt update
 sudo apt install i3 compton feh -y
 
+# Setup GTK themes for i3
+sudo apt install lxappearance gtk-chtheme qt4-qtconfig -y
+
+# Install blueman
+sudo apt install blueman -y
+
 # Setup rofi
 sudo apt install rofi
 cd ~
@@ -73,3 +79,6 @@ sudo apt-get install apt-transport-https -y
 echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
 sudo apt-get update
 sudo apt-get install sublime-text -y
+
+# Install mosh
+sudo apt install mosh
