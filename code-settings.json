@@ -1,0 +1,17 @@
+{
+    "workbench.colorTheme": "Monokai",
+    "window.menuBarVisibility": "toggle",
+    "workbench.statusBar.visible": false,
+    "workbench.activityBar.visible": true,
+    "workbench.sideBar.location": "left",
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.emptySelectionClipboard": false,
+    "editor.formatOnPaste": true,
+    "window.restoreWindows": "all",
+    "window.title": "${rootName}${separator}${appName}",
+
+    "html.format.endWithNewline": true,
+
+    "telemetry.enableCrashReporter": false,
+    "telemetry.enableTelemetry": false
+}
