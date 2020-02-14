@@ -49,6 +49,11 @@ Plugin 'dense-analysis/ale'
 " Tmux/vim split compatibility
 Plugin 'christoomey/vim-tmux-navigator'
 
+" Autocomplete
+if has('nvim')
+  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+endif
+
 call vundle#end()
 
 filetype plugin indent on
@@ -84,11 +89,17 @@ let g:nerdtree_tabs_open_on_console_startup = 1
 let NERDTreeShowHidden=1
 autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "FileNode", 'callback': "OpenInTab", 'override':1 })
     function! OpenInTab(node)
-        call a:node.activate({'reuse': 'all', 'where': 't'})
+
+      call a:node.activate({'reuse': 'all', 'where': 't'})
     endfunction
 
 " Clear gutter bg color
 hi clear SignColumn
+
+" ----- Droplete settings -----
+if has('nvim')
+  let g:deoplete#enable_at_startup = 1
+endif
 
 " ----- Ale settings -----
 let g:ale_sign_error = '✘'
@@ -166,6 +177,10 @@ imap <c-s> <esc>:w<cr>a
 " Ctrl q to quit
 nmap <c-q> :q<cr>
 imap <c-q> <esc>:q<cr>a
+
+" Ctrl r to reload from disk
+nmap <c-r> :e<cr>
+imap <c-r> :e<cr>
 
 " Ctrl v to paste like a normal person (with auto fixing indentation)
 " http://vim.wikia.com/wiki/Format_pasted_text_automatically
