@@ -25,3 +25,5 @@ alias gcb "git checkout"
 funcsave gcb
 alias gl "git log"
 funcsave gl
+alias gd "git diff"
+funcsave gd
