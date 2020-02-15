@@ -68,7 +68,7 @@ set hlsearch
 " Always show gutter (dont move left to right)
 set signcolumn=yes
 " Update git and syntax more quickly
-set updatetime=200
+set updatetime=250
 syntax on
 
 " ----- Plugin Settings -----
@@ -96,7 +96,7 @@ autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "Fi
 " Clear gutter bg color
 hi clear SignColumn
 
-" ----- Droplete settings -----
+" ----- Deoplete settings -----
 if has('nvim')
   let g:deoplete#enable_at_startup = 1
 endif
