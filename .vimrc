@@ -5,6 +5,12 @@
 " Enable most vim settings
 set nocompatible
 
+" Disable arrow keys (force to use hjkl)
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
 " Force bash as shell (fish/vundle not compatible)
 set shell=/bin/bash
 
