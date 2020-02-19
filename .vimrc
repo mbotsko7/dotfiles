@@ -11,6 +11,11 @@ noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
 
+noremap! <Up> <Nop>
+noremap! <Down> <Nop>
+noremap! <Left> <Nop>
+noremap! <Right> <Nop>
+
 " Force bash as shell (fish/vundle not compatible)
 set shell=/bin/bash
 
