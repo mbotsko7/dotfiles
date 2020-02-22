@@ -113,6 +113,9 @@ hi clear SignColumn
 " ----- Deoplete settings -----
 if has('nvim')
   let g:deoplete#enable_at_startup = 1
+
+  " Tab completion
+  inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 endif
 
 " ----- Ale settings -----
