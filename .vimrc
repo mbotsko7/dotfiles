@@ -68,6 +68,9 @@ if has('nvim')
   Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 endif
 
+" Comment blocks
+Plugin 'preservim/nerdcommenter'
+
 call vundle#end()
 
 filetype plugin indent on
