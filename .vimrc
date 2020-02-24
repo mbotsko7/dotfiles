@@ -91,6 +91,7 @@ syntax on
 " ----- Plugin Settings -----
 
 " Theme
+let g:gruvbox_contrast_dark = 'hard'
 colorscheme gruvbox
 set background=dark
 let g:lightline = {
