@@ -17,7 +17,7 @@ noremap! <Left> <Nop>
 noremap! <Right> <Nop>
 
 " FZF Git files only
-let $FZF_DEFAULT_COMMAND = 'ag -g "" --hidden'
+let $FZF_DEFAULT_COMMAND = 'ag -g "" --hidden --ignore .git'
 
 " Force bash as shell (fish/vundle not compatible)
 set shell=/bin/bash
