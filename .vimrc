@@ -57,9 +57,6 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 
-" Linting
-Plugin 'dense-analysis/ale'
-
 " Autocomplete
 if has('nvim')
   Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
