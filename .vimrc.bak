@@ -17,7 +17,7 @@ noremap! <Left> <Nop>
 noremap! <Right> <Nop>
 
 " FZF Git files only
-let $FZF_DEFAULT_COMMAND = 'ag -g "" --hidden'
+let $FZF_DEFAULT_COMMAND = 'ag -g "" --hidden --ignore .git'
 
 " Force bash as shell (fish/vundle not compatible)
 set shell=/bin/bash
@@ -45,7 +45,7 @@ Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'editorconfig/editorconfig-vim'
 
 " Auto surround with () and {}
-Plugin 'tpope/vim-surround'
+"Plugin 'tpope/vim-surround'
 
 " Syntax Checking and Highlighting
 Plugin 'sheerun/vim-polyglot'
@@ -58,10 +58,13 @@ Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 
 " Linting
-Plugin 'dense-analysis/ale'
+"Plugin 'dense-analysis/ale'
 
 " Tmux/vim split compatibility
-Plugin 'christoomey/vim-tmux-navigator'
+"Plugin 'christoomey/vim-tmux-navigator'
+
+" Bracket autocompletion/matching
+"Plugin 'jiangmiao/auto-pairs'
 
 " Autocomplete
 if has('nvim')
@@ -73,7 +76,7 @@ Plugin 'preservim/nerdcommenter'
 
 call vundle#end()
 
-filetype plugin indent on
+"filetype plugin indent on
 
 " General Vim Settings
 set backspace=indent,eol,start
@@ -138,10 +141,10 @@ command! -bang -nargs=* GGrep
 " https://thevaluable.dev/vim-search/
 " Ctrl p to serch files
 nmap <c-p> :Files<cr>
-imap <c-p> :Files<cr>
+imap <c-p> <esc>:Files<cr>
 " Ctrl f to search in project
 nmap <c-f> :GGrep<cr>
-imap <c-f> :GGrep<cr>
+imap <c-f> <esc>:GGrep<cr>
 
 " Mouse
 " let g:VM_mouse_mappings = 1
