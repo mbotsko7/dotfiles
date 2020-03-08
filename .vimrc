@@ -138,10 +138,10 @@ command! -bang -nargs=* GGrep
 " https://thevaluable.dev/vim-search/
 " Ctrl p to serch files
 nmap <c-p> :Files<cr>
-imap <c-p> :Files<cr>
+imap <c-p> <esc>:Files<cr>
 " Ctrl f to search in project
 nmap <c-f> :GGrep<cr>
-imap <c-f> :GGrep<cr>
+imap <c-f> <esc>:GGrep<cr>
 
 " Mouse
 " let g:VM_mouse_mappings = 1
