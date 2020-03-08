@@ -44,9 +44,6 @@ Plugin 'jistr/vim-nerdtree-tabs'
 " Editor Config
 Plugin 'editorconfig/editorconfig-vim'
 
-" Auto surround with () and {}
-Plugin 'tpope/vim-surround'
-
 " Syntax Checking and Highlighting
 Plugin 'sheerun/vim-polyglot'
 
