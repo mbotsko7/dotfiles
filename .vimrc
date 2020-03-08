@@ -60,9 +60,6 @@ Plugin 'junegunn/fzf.vim'
 " Linting
 Plugin 'dense-analysis/ale'
 
-" Tmux/vim split compatibility
-Plugin 'christoomey/vim-tmux-navigator'
-
 " Autocomplete
 if has('nvim')
   Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
