@@ -54,6 +54,9 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 
+" Bracket autocompletion/matching
+Plugin 'jiangmiao/auto-pairs'
+
 " Autocomplete
 if has('nvim')
   Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
