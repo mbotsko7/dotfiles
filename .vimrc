@@ -73,6 +73,7 @@ filetype plugin indent on
 set backspace=indent,eol,start
 set ruler
 set number
+set relativenumber
 set showcmd
 set incsearch
 set hlsearch
