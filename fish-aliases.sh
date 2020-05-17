@@ -27,3 +27,7 @@ alias gl "git log"
 funcsave gl
 alias gd "git diff"
 funcsave gd
+alias dc "docker-compose"
+funcsave dc
+alias k "kubectl"
+funcsave k
