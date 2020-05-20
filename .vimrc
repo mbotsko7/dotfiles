@@ -74,6 +74,8 @@ set relativenumber
 set showcmd
 set incsearch
 set hlsearch
+set ignorecase " Case-insensitive search
+set smartcase  " Smart case-insensitive search (requires ignorecase)
 " Always show gutter (dont move left to right)
 set signcolumn=yes
 " Update git and syntax more quickly
