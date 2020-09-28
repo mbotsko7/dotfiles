@@ -39,6 +39,7 @@ Plugin 'morhetz/gruvbox'
 
 " File Tree
 Plugin 'scrooloose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
 
 " Editor Config
 Plugin 'editorconfig/editorconfig-vim'
@@ -94,8 +95,9 @@ let g:lightline = {
 " File tree
 " ----- jistr/vim-nerdtree-tabs -----
 " Open/close NERDTree Tabs with \t
-nmap <silent> <leader>t :NERDTreeToggle<CR>
+nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
 " To have NERDTree always open on startup
+let g:nerdtree_tabs_open_on_console_startup = 1
 let NERDTreeShowHidden=1
 autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "FileNode", 'callback': "OpenInTab", 'override':1 })
     function! OpenInTab(node)
