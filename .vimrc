@@ -145,8 +145,8 @@ command! -bang -nargs=* GGrep
 nmap <c-p> :Files<cr>
 imap <c-p> <esc>:Files<cr>
 " Ctrl f to search in project
-nmap <c-f> :GGrep<cr>
-imap <c-f> <esc>:GGrep<cr>
+nmap <c-f> :Ag<cr>
+imap <c-f> <esc>:Ag<cr>
 
 " Mouse
 " let g:VM_mouse_mappings = 1
@@ -180,18 +180,9 @@ endif
 " https://superuser.com/questions/271023/can-i-disable-continuation-of-comments-to-the-next-line-in-vim
 autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 
-" Ctrl s to save
-nmap <c-s> :w<cr>
-imap <c-s> <esc>:w<cr>a
-
 " Ctrl q to quit
 nmap <c-q> :q<cr>
 imap <c-q> <esc>:q<cr>a
-
-" Ctrl v to paste like a normal person (with auto fixing indentation)
-" http://vim.wikia.com/wiki/Format_pasted_text_automatically
-nmap p p=`]
-nmap <c-v> p
 
 " Reselect visual paste after shifting block
 " https://vi.stackexchange.com/questions/598/faster-way-to-move-a-block-of-text
