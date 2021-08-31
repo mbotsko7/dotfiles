@@ -5,17 +5,6 @@
 " Enable most vim settings
 set nocompatible
 
-" Disable arrow keys (force to use hjkl)
-noremap <Up> <Nop>
-noremap <Down> <Nop>
-noremap <Left> <Nop>
-noremap <Right> <Nop>
-
-noremap! <Up> <Nop>
-noremap! <Down> <Nop>
-noremap! <Left> <Nop>
-noremap! <Right> <Nop>
-
 " FZF Git files only
 let $FZF_DEFAULT_COMMAND = 'ag -g "" --hidden --ignore .git'
 
