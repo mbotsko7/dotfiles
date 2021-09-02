@@ -47,9 +47,6 @@ Plugin 'junegunn/fzf.vim'
 if has('nvim')
   " Autocomplete
   Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
-  " Linting
-  Plugin 'dense-analysis/ale'
 endif
 
 " Comment blocks
@@ -107,13 +104,6 @@ if has('nvim')
 
   " Tab completion
   inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-endif
-
-" ----- Ale Settings -----
-
-if has('nvim')
-  let g:ale_sign_error = '✘'
-  let g:ale_sign_warning = '▲'
 endif
 
 " ----- fzf settings -----
