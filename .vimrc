@@ -30,7 +30,14 @@ Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
 Plug 'fannheyward/coc-styled-components', {'do': 'yarn install --frozen-lockfile'}
+
+" Multiline Editing
+Plug 'mg979/vim-visual-multi'
+
+" Linting
+Plug 'dense-analysis/ale'
 
 " File Tree
 Plug 'scrooloose/nerdtree'
@@ -137,6 +144,10 @@ require('telescope').setup{
 }
 EOF
 
+" ----- ALE -----
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '▲'
+
 " ----- CoC settings -----
 " Tab completion
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
@@ -216,6 +227,10 @@ autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 " Ctrl q to quit
 nmap <c-q> :q<cr>
 imap <c-q> <esc>:q<cr>a
+
+" Ctrl-shift q to quit all
+nmap <c-Q> :qa<cr>
+imap <c-Q> <esc>:qa<cr>
 
 " Crtl s to save
 nmap <c-s> :w<cr>
