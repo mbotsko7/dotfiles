@@ -1,7 +1,3 @@
-" Based on https://github.com/jez/vim-as-an-ide/commit/dff7da3
-
-" Uses Vundle
-
 " Enable most vim settings
 set nocompatible
 
@@ -16,58 +12,58 @@ noremap <Right> <Nop>
 "noremap! <Left> <Nop>
 "noremap! <Right> <Nop>
 
-" FZF Git files only
-let $FZF_DEFAULT_COMMAND = 'ag -g "" --hidden --ignore .git'
-
 " Force bash as shell (fish/vundle not compatible)
 set shell=/bin/bash
 
 " Vundle Setup
 filetype off
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-" Vundle set up
-Plugin 'VundleVim/Vundle.vim'
+call plug#begin()
 
 " Status bar
-Plugin 'itchyny/lightline.vim'
+Plug 'itchyny/lightline.vim'
 
 " Color Scheme
-Plugin 'morhetz/gruvbox'
+Plug 'morhetz/gruvbox'
+
+" Coc for autocompletion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+Plug 'fannheyward/coc-styled-components', {'do': 'yarn install --frozen-lockfile'}
 
 " File Tree
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
+Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
 
 " Editor Config
-Plugin 'editorconfig/editorconfig-vim'
+Plug 'editorconfig/editorconfig-vim'
 
 " Syntax Checking and Highlighting
-Plugin 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
+
+" Fuzzy finding
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 " Inline Git
-Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-fugitive'
+Plug 'mhinz/vim-signify'
+Plug 'tpope/vim-fugitive'
+"Plug 'tpope/vim-rhubarb'
 
-" Fuzzy Finding
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
-
-" Autocomplete
-if has('nvim')
-  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-endif
+" Global find and replace
+Plug 'brooth/far.vim'
 
 " Comment blocks
-Plugin 'preservim/nerdcommenter'
+Plug 'preservim/nerdcommenter'
 
-call vundle#end()
+call plug#end()
 
 filetype plugin indent on
 
-" General Vim Settings
+" ----- General Vim Settings -----
+set foldmethod=syntax         
+set foldlevelstart=99
 set backspace=indent,eol,start
 set ruler
 set number
@@ -83,22 +79,35 @@ set signcolumn=yes
 set updatetime=250
 syntax on
 
-" ----- Plugin Settings -----
+" ----- Theme (gruvbox) -----
 
-" Theme
 let g:gruvbox_contrast_dark = 'hard'
 colorscheme gruvbox
 set background=dark
+
+" ----- Lightline -----
+" -- INSERT -- no longer needed
+set noshowmode
 let g:lightline = {
       \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+      \   'right': [ [ 'lineinfo' ],
+		  \              [ 'percent' ],
+		  \              [ 'filetype' ] ]
+      \ },
+      \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
+      \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
       \ }
 
-" File tree
 " ----- jistr/vim-nerdtree-tabs -----
+
 " Open/close NERDTree Tabs with \t
 nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
-" To have NERDTree always open on startup
-let g:nerdtree_tabs_open_on_console_startup = 1
 let NERDTreeShowHidden=1
 autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "FileNode", 'callback': "OpenInTab", 'override':1 })
     function! OpenInTab(node)
@@ -109,42 +118,70 @@ autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "Fi
 " Clear gutter bg color
 hi clear SignColumn
 
-" ----- Deoplete settings -----
-if has('nvim')
-  let g:deoplete#enable_at_startup = 1
+" ----- Telescope settings -----
+nmap <c-p> :Telescope git_files<cr>
+nmap <c-f> :Telescope live_grep<cr>
 
-  " Tab completion
-  inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-endif
+lua << EOF
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      n = {
+        ["<CR>"] = 'select_tab',
+      },
+      i = {
+        ["<CR>"] = 'select_tab',
+      },
+    },
+  },
+}
+EOF
 
-" ----- fzf settings -----
-" fzf new tab
-let g:fzf_action = {
-      \ 'return': 'tab split', 
-      \ 'ctrl-j': 'split',
-      \ 'ctrl-k': 'vsplit' }
-" Command for git grep
-" - fzf#vim#grep(command, with_column, [options], [fullscreen])
-command! -bang -nargs=* GGrep
-      \ call fzf#vim#grep(
-      \   'git grep --line-number '.shellescape(<q-args>), 0,
-      \   { 'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
-" When we need better searching / replacing
-" https://thevaluable.dev/vim-search/
-" Ctrl p to serch files
-nmap <c-p> :Files<cr>
-imap <c-p> <esc>:Files<cr>
-" Ctrl f to search in project
-nmap <c-f> :GGrep<cr>
-imap <c-f> <esc>:GGrep<cr>
+" ----- CoC settings -----
+" Tab completion
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
-let g:fzf_layout = { 'tmux': '-p90%,60%' }
-"if exists('$TMUX')
-"else
-  "let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
-"endif
+" Intellisesnse
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
-" Mouse
+" Show documentation (\h)
+nnoremap <silent> <leader>h :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Rename (\rn)
+nmap <leader>rn <Plug>(coc-rename)
+
+" ----- Far settings -----
+
+" Open far in new tab to not overwrite current buffer
+let g:far#window_layout = 'tab'
+
+" Bottom preview height
+let g:far#preview_window_height = 20
+
+" Setup rg as search for speed and gitignore support
+let g:far#source = 'rgnvim'
+let g:far#glob_mode = 'rg'
+let g:far#default_file_mask = '*'
+
+" Displaying results on right breaks syntax highlighting of results
+"let g:far#preview_window_layout = 'right'
+
+hi FarFilePath ctermfg=Blue
+
+" ----- Mouse -----
+
 " let g:VM_mouse_mappings = 1
 " Doing this manually because CTRL Left click is an osx thing
 " So biunding to both left and right mouse
@@ -209,8 +246,3 @@ let &t_SI = "\<Esc>[4 q"
 let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
 
-" Make it so that ctrl+[hjkl] moves you between splits
-nmap <silent> <c-k> :wincmd k<CR>
-nmap <silent> <c-j> :wincmd j<CR>
-nmap <silent> <c-h> :wincmd h<CR>
-nmap <silent> <c-l> :wincmd l<CR>
