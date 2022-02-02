@@ -11,10 +11,10 @@ noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
 
-noremap! <Up> <Nop>
-noremap! <Down> <Nop>
-noremap! <Left> <Nop>
-noremap! <Right> <Nop>
+"noremap! <Up> <Nop>
+"noremap! <Down> <Nop>
+"noremap! <Left> <Nop>
+"noremap! <Right> <Nop>
 
 " FZF Git files only
 let $FZF_DEFAULT_COMMAND = 'ag -g "" --hidden --ignore .git'
@@ -49,6 +49,7 @@ Plugin 'sheerun/vim-polyglot'
 
 " Inline Git
 Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-fugitive'
 
 " Fuzzy Finding
 Plugin 'junegunn/fzf'
@@ -137,6 +138,12 @@ imap <c-p> <esc>:Files<cr>
 nmap <c-f> :GGrep<cr>
 imap <c-f> <esc>:GGrep<cr>
 
+let g:fzf_layout = { 'tmux': '-p90%,60%' }
+"if exists('$TMUX')
+"else
+  "let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+"endif
+
 " Mouse
 " let g:VM_mouse_mappings = 1
 " Doing this manually because CTRL Left click is an osx thing
@@ -169,18 +176,14 @@ endif
 " https://superuser.com/questions/271023/can-i-disable-continuation-of-comments-to-the-next-line-in-vim
 autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 
-" Ctrl s to save
-nmap <c-s> :w<cr>
-imap <c-s> <esc>:w<cr>a
-
 " Ctrl q to quit
 nmap <c-q> :q<cr>
 imap <c-q> <esc>:q<cr>a
 
 " Ctrl v to paste like a normal person (with auto fixing indentation)
 " http://vim.wikia.com/wiki/Format_pasted_text_automatically
-nmap p p=`]
-nmap <c-v> p
+"nmap p p=`]
+"nmap <c-v> p
 
 " Reselect visual paste after shifting block
 " https://vi.stackexchange.com/questions/598/faster-way-to-move-a-block-of-text
@@ -205,3 +208,9 @@ autocmd InsertLeave * set nocul
 let &t_SI = "\<Esc>[4 q"
 let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
+
+" Make it so that ctrl+[hjkl] moves you between splits
+nmap <silent> <c-k> :wincmd k<CR>
+nmap <silent> <c-j> :wincmd j<CR>
+nmap <silent> <c-h> :wincmd h<CR>
+nmap <silent> <c-l> :wincmd l<CR>
