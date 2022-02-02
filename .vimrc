@@ -57,6 +57,9 @@ Plug 'brooth/far.vim'
 " Comment blocks
 Plug 'preservim/nerdcommenter'
 
+" Multiline Editing
+Plug 'mg979/vim-visual-multi'
+
 call plug#end()
 
 filetype plugin indent on
