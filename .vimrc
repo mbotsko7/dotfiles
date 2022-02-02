@@ -217,6 +217,10 @@ autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 nmap <c-q> :q<cr>
 imap <c-q> <esc>:q<cr>a
 
+" Crtl s to save
+nmap <c-s> :w<cr>
+imap <c-s> <esc>:w<cr>a
+
 " Ctrl v to paste like a normal person (with auto fixing indentation)
 " http://vim.wikia.com/wiki/Format_pasted_text_automatically
 "nmap p p=`]
