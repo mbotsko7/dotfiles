@@ -18,6 +18,12 @@ set shell=/bin/bash
 " Vundle Setup
 filetype off
 
+" Change this to enable linting
+let g:enable_ale = 0
+
+" Use coc.vim for LSP (perf)
+let g:ale_disable_lsp = 1
+
 call plug#begin()
 
 " Status bar
@@ -59,6 +65,11 @@ Plug 'preservim/nerdcommenter'
 
 " Multiline Editing
 Plug 'mg979/vim-visual-multi'
+
+" Linting
+if g:enable_ale
+  Plug 'dense-analysis/ale'
+endif
 
 call plug#end()
 
@@ -120,6 +131,10 @@ autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "Fi
 
 " Clear gutter bg color
 hi clear SignColumn
+
+" ----- ALE -----
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '▲'
 
 " ----- Telescope settings -----
 nmap <c-p> :Telescope git_files<cr>
