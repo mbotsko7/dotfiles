@@ -60,7 +60,6 @@ filetype plugin indent on
 set backspace=indent,eol,start
 set ruler
 set number
-set relativenumber
 set showcmd
 set incsearch
 set hlsearch
@@ -76,7 +75,7 @@ syntax on
 
 " Theme
 let g:gruvbox_contrast_dark = 'hard'
-colorscheme gruvbox
+colorscheme blackboard
 set background=dark
 let g:lightline = {
       \ 'colorscheme': 'wombat',
@@ -110,8 +109,8 @@ endif
 " fzf new tab
 let g:fzf_action = {
       \ 'return': 'tab split', 
-      \ 'ctrl-j': 'split',
-      \ 'ctrl-k': 'vsplit' }
+      \ 'ctrl-i': 'split',
+      \ 'ctrl-s': 'vsplit' }
 " Command for git grep
 " - fzf#vim#grep(command, with_column, [options], [fullscreen])
 command! -bang -nargs=* GGrep
@@ -159,10 +158,6 @@ endif
 " https://superuser.com/questions/271023/can-i-disable-continuation-of-comments-to-the-next-line-in-vim
 autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
 
-" Ctrl q to quit
-nmap <c-q> :q<cr>
-imap <c-q> <esc>:q<cr>a
-
 " Reselect visual paste after shifting block
 " https://vi.stackexchange.com/questions/598/faster-way-to-move-a-block-of-text
 xnoremap > >gv
@@ -186,3 +181,21 @@ autocmd InsertLeave * set nocul
 let &t_SI = "\<Esc>[4 q"
 let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
+
+"Custom Boushi configs
+nmap <S-q> :q<cr>
+nnoremap w b
+
+"Temporarily disabled settings
+
+" Ctrl q to quit
+" nmap <c-q> :q<cr>
+" imap <c-q> <esc>:q<cr>a
+
+nmap <silent> <c-k> :wincmd k<CR>
+nmap <silent> <c-j> :wincmd j<CR>
+nmap <silent> <c-h> :wincmd h<CR>
+nmap <silent> <c-l> :wincmd l<CR>
+
+set foldmethod=syntax         
+set foldlevelstart=99
