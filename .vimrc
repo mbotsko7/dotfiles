@@ -1,6 +1,9 @@
 " Enable most vim settings
 set nocompatible
 
+" Confirm when quitting without having written
+set confirm
+
 " Disable arrow keys (force to use hjkl)
 noremap <Up> <Nop>
 noremap <Down> <Nop>
@@ -65,6 +68,9 @@ Plug 'preservim/nerdcommenter'
 
 " Multiline Editing
 Plug 'mg979/vim-visual-multi'
+
+" Previewer for files - used only for it's vim window implementation
+Plug 'rmagatti/goto-preview'
 
 " Linting
 if g:enable_ale
@@ -155,15 +161,24 @@ require('telescope').setup{
 }
 EOF
 
+" ----- Goto Preview -----
+" Note: This plugin really isn't used for it's LSP - only used for it's stacking floating windown implementation
+
+lua << EOF
+  require"goto-preview".setup { }
+EOF
+
 " ----- CoC settings -----
 " Tab completion
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
+
 " Intellisesnse
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gd :PreviewDefinition<CR>
+nmap <silent> gy :PreviewTypeDefinition<CR>
 nmap <silent> gr <Plug>(coc-references)
 
 " Show documentation (\h)
@@ -180,6 +195,29 @@ endfunction
 " Rename (\rn)
 nmap <leader>rn <Plug>(coc-rename)
 
+" Inline previews (similar to VSCode)
+function! OpenPreviewInline(...)
+    let fname = a:1
+    let call = ''
+    if a:0 == 2
+        let fname = a:2
+        let call = a:1
+    endif
+    lua require('goto-preview.lib').open_floating_win(fname, { 1, 0 })
+    " goto-preview does not actually open the correct file lol
+    execute 'e ' . fname
+
+    "" Execute the cursor movement command
+    exe call
+endfunction
+command! -nargs=+ CocOpenPreviewInline :call OpenPreviewInline(<f-args>)
+
+command! -nargs=0 PreviewDefinition :call CocActionAsync('jumpDefinition', 'CocOpenPreviewInline')
+command! -nargs=0 PreviewTypeDefinition :call CocActionAsync('jumpTypeDefinition', 'CocOpenPreviewInline')
+
+" BG for inline previews
+"hi Pmenu ctermbg=233 guibg=#1d2021
+
 " ----- Far settings -----
 
 " Open far in new tab to not overwrite current buffer
@@ -192,6 +230,42 @@ let g:far#preview_window_height = 20
 let g:far#source = 'rgnvim'
 let g:far#glob_mode = 'rg'
 let g:far#default_file_mask = '*'
+
+" S is a replacement for F but searches the current file if no file passed
+command! -nargs=+ S call S(<f-args>)
+function! S( ... )
+    let xargs = ['--enable-replace=0']
+
+    let mask = @%
+    if exists('a:2')
+          let mask = a:2
+    endif
+
+    call far#find({
+          \ 'pattern': a:1,
+          \ 'file_mask': mask,
+          \ 'replace_with': a:1,
+          \ 'range': [-1,-1]
+          \ }, xargs)
+endfunction
+
+" Sar is a replacement for Far but searches the current file if no file passed
+command! -nargs=+ Sar call Sar(<f-args>)
+function! Sar( ... )
+    let xargs = ['--enable-replace=1']
+
+    let mask = @%
+    if exists('a:3')
+          let mask = a:3
+    endif
+
+    call far#find({
+          \ 'pattern': a:1,
+          \ 'file_mask': mask,
+          \ 'replace_with': a:2,
+          \ 'range': [-1,-1]
+          \ }, xargs)
+endfunction
 
 " Displaying results on right breaks syntax highlighting of results
 "let g:far#preview_window_layout = 'right'
