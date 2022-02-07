@@ -61,7 +61,7 @@ Plug 'tpope/vim-fugitive'
 "Plug 'tpope/vim-rhubarb'
 
 " Global find and replace
-Plug 'brooth/far.vim'
+Plug 'windwp/nvim-spectre'
 
 " Comment blocks
 Plug 'preservim/nerdcommenter'
@@ -218,59 +218,16 @@ command! -nargs=0 PreviewTypeDefinition :call CocActionAsync('jumpTypeDefinition
 " BG for inline previews
 "hi Pmenu ctermbg=233 guibg=#1d2021
 
-" ----- Far settings -----
+" ----- Spectre -----
 
-" Open far in new tab to not overwrite current buffer
-let g:far#window_layout = 'tab'
+" Global search
+nnoremap <leader>S :lua require('spectre').open()<CR>
 
-" Bottom preview height
-let g:far#preview_window_height = 20
-
-" Setup rg as search for speed and gitignore support
-let g:far#source = 'rgnvim'
-let g:far#glob_mode = 'rg'
-let g:far#default_file_mask = '*'
-
-" S is a replacement for F but searches the current file if no file passed
-command! -nargs=+ S call S(<f-args>)
-function! S( ... )
-    let xargs = ['--enable-replace=0']
-
-    let mask = @%
-    if exists('a:2')
-          let mask = a:2
-    endif
-
-    call far#find({
-          \ 'pattern': a:1,
-          \ 'file_mask': mask,
-          \ 'replace_with': a:1,
-          \ 'range': [-1,-1]
-          \ }, xargs)
-endfunction
-
-" Sar is a replacement for Far but searches the current file if no file passed
-command! -nargs=+ Sar call Sar(<f-args>)
-function! Sar( ... )
-    let xargs = ['--enable-replace=1']
-
-    let mask = @%
-    if exists('a:3')
-          let mask = a:3
-    endif
-
-    call far#find({
-          \ 'pattern': a:1,
-          \ 'file_mask': mask,
-          \ 'replace_with': a:2,
-          \ 'range': [-1,-1]
-          \ }, xargs)
-endfunction
-
-" Displaying results on right breaks syntax highlighting of results
-"let g:far#preview_window_layout = 'right'
-
-hi FarFilePath ctermfg=Blue
+" Search current word
+nnoremap <leader>sw :lua require('spectre').open_visual({select_word=true})<CR>
+vnoremap <leader>s :lua require('spectre').open_visual()<CR>
+" Search in current file
+nnoremap <leader>sp viw:lua require('spectre').open_file_search()<cr>
 
 " ----- Mouse -----
 
