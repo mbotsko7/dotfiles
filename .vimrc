@@ -147,7 +147,7 @@ EOF
 " ----- ALE -----
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '▲'
-
+let g:ale_hover_to_floating_preview = 1
 " ----- CoC settings -----
 " Tab completion
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
