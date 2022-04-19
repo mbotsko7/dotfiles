@@ -60,6 +60,8 @@ Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 "Plug 'tpope/vim-rhubarb'
 
+Plug 'tpope/vim-surround'
+
 " Global find and replace
 Plug 'windwp/nvim-spectre'
 
