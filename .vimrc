@@ -1,12 +1,8 @@
-" Based on https://github.com/jez/vim-as-an-ide/commit/dff7da3
-
-" Uses Vundle
-
 " Enable most vim settings
 set nocompatible
 
-" FZF Git files only
-let $FZF_DEFAULT_COMMAND = 'ag -g "" --hidden --ignore .git'
+" Confirm when quitting without having written
+set confirm
 
 " Force bash as shell (fish/vundle not compatible)
 set shell=/bin/bash
@@ -14,49 +10,71 @@ set shell=/bin/bash
 " Vundle Setup
 filetype off
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Change this to enable linting
+let g:enable_ale = 1
 
-" Vundle set up
-Plugin 'VundleVim/Vundle.vim'
+" Use coc.vim for LSP (perf)
+let g:ale_disable_lsp = 1
+
+call plug#begin()
 
 " Status bar
-Plugin 'itchyny/lightline.vim'
+Plug 'itchyny/lightline.vim'
 
 " Color Scheme
-Plugin 'morhetz/gruvbox'
+Plug 'morhetz/gruvbox'
+
+" Coc for autocompletion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+Plug 'fannheyward/coc-styled-components', {'do': 'yarn install --frozen-lockfile'}
 
 " File Tree
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
+Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
 
 " Editor Config
-Plugin 'editorconfig/editorconfig-vim'
+Plug 'editorconfig/editorconfig-vim'
 
 " Syntax Checking and Highlighting
-Plugin 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
+
+" Fuzzy finding
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 " Inline Git
-Plugin 'airblade/vim-gitgutter'
+Plug 'mhinz/vim-signify'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 
-" Fuzzy Finding
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
+Plug 'tpope/vim-surround'
 
-" NeoVim required for performance
-if has('nvim')
-  " Autocomplete
-  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-endif
+" Global find and replace
+Plug 'windwp/nvim-spectre'
 
 " Comment blocks
-Plugin 'preservim/nerdcommenter'
+Plug 'preservim/nerdcommenter'
 
-call vundle#end()
+" Multiline Editing
+Plug 'mg979/vim-visual-multi'
+
+" Previewer for files - used only for it's vim window implementation
+Plug 'rmagatti/goto-preview'
+
+" Linting
+if g:enable_ale
+  Plug 'dense-analysis/ale'
+endif
+
+call plug#end()
 
 filetype plugin indent on
 
-" General Vim Settings
+" ----- General Vim Settings -----
+set foldmethod=syntax         
+set foldlevelstart=99
 set backspace=indent,eol,start
 set ruler
 set number
@@ -71,22 +89,35 @@ set signcolumn=yes
 set updatetime=250
 syntax on
 
-" ----- Plugin Settings -----
+" ----- Theme (gruvbox) -----
 
-" Theme
 let g:gruvbox_contrast_dark = 'hard'
 colorscheme blackboard
 set background=dark
+
+" ----- Lightline -----
+" -- INSERT -- no longer needed
+set noshowmode
 let g:lightline = {
       \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+      \   'right': [ [ 'lineinfo' ],
+		  \              [ 'percent' ],
+		  \              [ 'filetype' ] ]
+      \ },
+      \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
+      \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
       \ }
 
-" File tree
 " ----- jistr/vim-nerdtree-tabs -----
+
 " Open/close NERDTree Tabs with \t
 nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
-" To have NERDTree always open on startup
-let g:nerdtree_tabs_open_on_console_startup = 1
 let NERDTreeShowHidden=1
 autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "FileNode", 'callback': "OpenInTab", 'override':1 })
     function! OpenInTab(node)
@@ -97,36 +128,97 @@ autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "Fi
 " Clear gutter bg color
 hi clear SignColumn
 
-" ----- Deoplete settings -----
-if has('nvim')
-  let g:deoplete#enable_at_startup = 1
+" ----- ALE -----
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '▲'
 
-  " Tab completion
-  inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-endif
+" ----- Telescope settings -----
+nmap <c-p> :Telescope git_files<cr>
+nmap <c-f> :Telescope live_grep<cr>
 
-" ----- fzf settings -----
-" fzf new tab
-let g:fzf_action = {
-      \ 'return': 'tab split', 
-      \ 'ctrl-i': 'split',
-      \ 'ctrl-s': 'vsplit' }
-" Command for git grep
-" - fzf#vim#grep(command, with_column, [options], [fullscreen])
-command! -bang -nargs=* GGrep
-      \ call fzf#vim#grep(
-      \   'git grep --line-number '.shellescape(<q-args>), 0,
-      \   { 'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
-" When we need better searching / replacing
-" https://thevaluable.dev/vim-search/
-" Ctrl p to serch files
-nmap <c-p> :Files<cr>
-imap <c-p> <esc>:Files<cr>
-" Ctrl f to search in project
-nmap <c-f> :Ag<cr>
-imap <c-f> <esc>:Ag<cr>
+lua << EOF
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      n = {
+        ["<CR>"] = 'select_tab',
+      },
+      i = {
+        ["<CR>"] = 'select_tab',
+      },
+    },
+  },
+}
+EOF
 
-" Mouse
+" ----- Goto Preview -----
+" Note: This plugin really isn't used for it's LSP - only used for it's stacking floating windown implementation
+
+lua << EOF
+  require"goto-preview".setup { }
+EOF
+
+" ----- CoC settings -----
+" Tab completion
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Intellisesnse
+nmap <silent> gd :PreviewDefinition<CR>
+nmap <silent> gy :PreviewTypeDefinition<CR>
+nmap <silent> gr <Plug>(coc-references)
+
+" Show documentation (\h)
+nnoremap <silent> <leader>h :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Rename (\rn)
+nmap <leader>rn <Plug>(coc-rename)
+
+" Inline previews (similar to VSCode)
+function! OpenPreviewInline(...)
+    let fname = a:1
+    let call = ''
+    if a:0 == 2
+        let fname = a:2
+        let call = a:1
+    endif
+    lua require('goto-preview.lib').open_floating_win(fname, { 1, 0 })
+    " goto-preview does not actually open the correct file lol
+    execute 'e ' . fname
+
+    "" Execute the cursor movement command
+    exe call
+endfunction
+command! -nargs=+ CocOpenPreviewInline :call OpenPreviewInline(<f-args>)
+
+command! -nargs=0 PreviewDefinition :call CocActionAsync('jumpDefinition', 'CocOpenPreviewInline')
+command! -nargs=0 PreviewTypeDefinition :call CocActionAsync('jumpTypeDefinition', 'CocOpenPreviewInline')
+
+" BG for inline previews
+"hi Pmenu ctermbg=233 guibg=#1d2021
+
+" ----- Spectre -----
+
+" Global search
+nnoremap <leader>S :lua require('spectre').open()<CR>
+
+" Search current word
+nnoremap <leader>sw :lua require('spectre').open_visual({select_word=true})<CR>
+vnoremap <leader>s :lua require('spectre').open_visual()<CR>
+" Search in current file
+nnoremap <leader>sp viw:lua require('spectre').open_file_search()<cr>
+
+" ----- Mouse -----
 " let g:VM_mouse_mappings = 1
 " Doing this manually because CTRL Left click is an osx thing
 " So biunding to both left and right mouse
@@ -157,6 +249,14 @@ endif
 " Stop auto comment insertion
 " https://superuser.com/questions/271023/can-i-disable-continuation-of-comments-to-the-next-line-in-vim
 autocmd BufNewFile,BufRead * setlocal formatoptions-=cro
+
+" Ctrl q to quit
+nmap <c-q> :q<cr>
+imap <c-q> <esc>:q<cr>a
+
+" Crtl s to save
+nmap <c-s> :w<cr>
+imap <c-s> <esc>:w<cr>a
 
 " Reselect visual paste after shifting block
 " https://vi.stackexchange.com/questions/598/faster-way-to-move-a-block-of-text
@@ -196,6 +296,12 @@ nmap <silent> <c-k> :wincmd k<CR>
 nmap <silent> <c-j> :wincmd j<CR>
 nmap <silent> <c-h> :wincmd h<CR>
 nmap <silent> <c-l> :wincmd l<CR>
+" ----- Move lines vertically -----
 
-set foldmethod=syntax         
-set foldlevelstart=99
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
