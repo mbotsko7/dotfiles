@@ -71,9 +71,6 @@ Plug 'preservim/nerdcommenter'
 " Multiline Editing
 Plug 'mg979/vim-visual-multi'
 
-" Previewer for files - used only for it's vim window implementation
-Plug 'rmagatti/goto-preview'
-
 " Linting
 if g:enable_ale
   Plug 'dense-analysis/ale'
@@ -163,13 +160,6 @@ require('telescope').setup{
 }
 EOF
 
-" ----- Goto Preview -----
-" Note: This plugin really isn't used for it's LSP - only used for it's stacking floating windown implementation
-
-lua << EOF
-  require"goto-preview".setup { }
-EOF
-
 " ----- CoC settings -----
 " Tab completion
 inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
@@ -203,12 +193,26 @@ function! OpenPreviewInline(...)
         let fname = a:2
         let call = a:1
     endif
-    lua require('goto-preview.lib').open_floating_win(fname, { 1, 0 })
-    " goto-preview does not actually open the correct file lol
-    execute 'e ' . fname
 
-    "" Execute the cursor movement command
-    exe call
+    " Create the scratch buffer displayed in the floating window
+    let buf = nvim_create_buf(v:false, v:true)
+
+    " Get the current UI
+    let ui = nvim_list_uis()[0]
+
+    " Create the floating window
+    let opts = {'relative': 'cursor',
+                \ 'width': 70,
+                \ 'height': 12,
+                \ 'col': 0,
+                \ 'row': 1,
+                \ 'anchor': 'NW',
+                \ 'style': 'minimal',
+                \ 'border': 'single',
+                \ }
+    let win = nvim_open_win(buf, 1, opts)
+
+    execute 'edit ' . fname
 endfunction
 command! -nargs=+ CocOpenPreviewInline :call OpenPreviewInline(<f-args>)
 
