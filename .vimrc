@@ -1,6 +1,9 @@
 " Enable most vim settings
 set nocompatible
 
+" Confirm when quitting without having written
+set confirm
+
 " Disable arrow keys (force to use hjkl)
 noremap <Up> <Nop>
 noremap <Down> <Nop>
@@ -18,6 +21,12 @@ set shell=/bin/bash
 " Vundle Setup
 filetype off
 
+" Change this to enable linting
+let g:enable_ale = 1
+
+" Use coc.vim for LSP (perf)
+let g:ale_disable_lsp = 1
+
 call plug#begin()
 
 " Status bar
@@ -30,14 +39,10 @@ Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
 Plug 'fannheyward/coc-styled-components', {'do': 'yarn install --frozen-lockfile'}
 
 " Multiline Editing
 Plug 'mg979/vim-visual-multi'
-
-" Linting
-Plug 'dense-analysis/ale'
 
 " File Tree
 Plug 'scrooloose/nerdtree'
@@ -59,10 +64,21 @@ Plug 'tpope/vim-fugitive'
 "Plug 'tpope/vim-rhubarb'
 
 " Global find and replace
-Plug 'brooth/far.vim'
+Plug 'windwp/nvim-spectre'
 
 " Comment blocks
 Plug 'preservim/nerdcommenter'
+
+" Multiline Editing
+Plug 'mg979/vim-visual-multi'
+
+" Previewer for files - used only for it's vim window implementation
+Plug 'rmagatti/goto-preview'
+
+" Linting
+if g:enable_ale
+  Plug 'dense-analysis/ale'
+endif
 
 call plug#end()
 
@@ -125,6 +141,15 @@ autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "Fi
 " Clear gutter bg color
 hi clear SignColumn
 
+" ----- ALE -----
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '▲'
+"let g:ale_linters_explicit = 1
+let g:ale_linters = {
+  \   'javascript': ['eslint'],
+  \   'typescript': ['eslint'],
+  \   'typescriptreact' : ['eslint'],
+  \}
 " ----- Telescope settings -----
 nmap <c-p> :Telescope git_files<cr>
 nmap <c-f> :Telescope live_grep<cr>
@@ -148,16 +173,26 @@ EOF
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '▲'
 let g:ale_hover_to_floating_preview = 1
+
+" ----- Goto Preview -----
+" Note: This plugin really isn't used for it's LSP - only used for it's stacking floating windown implementation
+
+lua << EOF
+  require"goto-preview".setup { }
+EOF
+
 " ----- CoC settings -----
 " Tab completion
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
 " Intellisesnse
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gd :PreviewDefinition<CR>
+nmap <silent> gy :PreviewTypeDefinition<CR>
 nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gi <Plug>(coc-implementation)
 
 " Show documentation (\h)
 nnoremap <silent> <leader>h :call <SID>show_documentation()<CR>
@@ -173,23 +208,39 @@ endfunction
 " Rename (\rn)
 nmap <leader>rn <Plug>(coc-rename)
 
-" ----- Far settings -----
+" Inline previews (similar to VSCode)
+function! OpenPreviewInline(...)
+    let fname = a:1
+    let call = ''
+    if a:0 == 2
+        let fname = a:2
+        let call = a:1
+    endif
+    lua require('goto-preview.lib').open_floating_win(fname, { 1, 0 })
+    " goto-preview does not actually open the correct file lol
+    execute 'e ' . fname
 
-" Open far in new tab to not overwrite current buffer
-let g:far#window_layout = 'tab'
+    "" Execute the cursor movement command
+    exe call
+endfunction
+command! -nargs=+ CocOpenPreviewInline :call OpenPreviewInline(<f-args>)
 
-" Bottom preview height
-let g:far#preview_window_height = 20
+command! -nargs=0 PreviewDefinition :call CocActionAsync('jumpDefinition', 'CocOpenPreviewInline')
+command! -nargs=0 PreviewTypeDefinition :call CocActionAsync('jumpTypeDefinition', 'CocOpenPreviewInline')
 
-" Setup rg as search for speed and gitignore support
-let g:far#source = 'rgnvim'
-let g:far#glob_mode = 'rg'
-let g:far#default_file_mask = '*'
+" BG for inline previews
+"hi Pmenu ctermbg=233 guibg=#1d2021
 
-" Displaying results on right breaks syntax highlighting of results
-"let g:far#preview_window_layout = 'right'
+" ----- Spectre -----
 
-hi FarFilePath ctermfg=Blue
+" Global search
+nnoremap <leader>S :lua require('spectre').open()<CR>
+
+" Search current word
+nnoremap <leader>sw :lua require('spectre').open_visual({select_word=true})<CR>
+vnoremap <leader>s :lua require('spectre').open_visual()<CR>
+" Search in current file
+nnoremap <leader>sp viw:lua require('spectre').open_file_search()<cr>
 
 " ----- Mouse -----
 
@@ -264,4 +315,13 @@ autocmd InsertLeave * set nocul
 let &t_SI = "\<Esc>[4 q"
 let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
+
+" ----- Move lines vertically -----
+
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
 
