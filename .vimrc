@@ -35,11 +35,8 @@ Plug 'itchyny/lightline.vim'
 " Color Scheme
 Plug 'morhetz/gruvbox'
 
-" Coc for autocompletion
+" Coc for autocompletion - other coc plugins managed by coc below
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
-Plug 'fannheyward/coc-styled-components', {'do': 'yarn install --frozen-lockfile'}
 
 " File Tree
 Plug 'scrooloose/nerdtree'
@@ -161,10 +158,12 @@ require('telescope').setup{
 EOF
 
 " ----- CoC settings -----
+let g:coc_global_extensions = ['coc-tsserver', 'coc-css', 'coc-angular']
+
 " Tab completion
+inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
 inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
-inoremap <silent><expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
 " Intellisesnse
 nmap <silent> gd :PreviewDefinition<CR>
