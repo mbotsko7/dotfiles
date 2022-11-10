@@ -1,3 +1,8 @@
+" Quick customizations
+let g:lint_all_the_things = 0 " continuous linting
+let g:i_like_trees = 0 " auto-open trees, always
+let g:pretty_icons = 0 " requires https://github.com/ryanoasis/nerd-fonts
+
 " Enable most vim settings
 set nocompatible
 
@@ -21,12 +26,6 @@ set shell=/bin/bash
 " Vundle Setup
 filetype off
 
-" Change this to enable linting
-let g:enable_ale = 0
-
-" Use coc.vim for LSP (perf)
-let g:ale_disable_lsp = 1
-
 call plug#begin()
 
 " Status bar
@@ -39,8 +38,10 @@ Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " File Tree
-Plug 'scrooloose/nerdtree'
-Plug 'jistr/vim-nerdtree-tabs'
+if g:pretty_icons
+  Plug 'nvim-tree/nvim-web-devicons'
+endif
+Plug 'nvim-tree/nvim-tree.lua'
 
 " Editor Config
 Plug 'editorconfig/editorconfig-vim'
@@ -55,7 +56,6 @@ Plug 'nvim-telescope/telescope.nvim'
 " Inline Git
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
-"Plug 'tpope/vim-rhubarb'
 
 Plug 'tpope/vim-surround'
 
@@ -69,7 +69,7 @@ Plug 'preservim/nerdcommenter'
 Plug 'mg979/vim-visual-multi'
 
 " Linting
-if g:enable_ale
+if g:lint_all_the_things
   Plug 'dense-analysis/ale'
 endif
 
@@ -120,16 +120,79 @@ let g:lightline = {
       \ },
       \ }
 
-" ----- jistr/vim-nerdtree-tabs -----
+" ----- nvim-tree -----
 
-" Open/close NERDTree Tabs with \t
-nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
-let NERDTreeShowHidden=1
-autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "FileNode", 'callback': "OpenInTab", 'override':1 })
-    function! OpenInTab(node)
+nmap <silent> <leader>t :NvimTreeFindFileToggle<CR>
 
-      call a:node.activate({'reuse': 'all', 'where': 't'})
-    endfunction
+lua << EOF
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+nvimTreeConfig = {
+  sort_by = "name",
+  git = {
+    ignore = false,
+  },
+  filters = {
+    dotfiles = false,
+  },
+  view = {
+    adaptive_size = false,
+    mappings = {
+      list = {
+        { key = "%", action = "vsplit" },
+        { key = "\"", action = "split" },
+      },
+    },
+  },
+  renderer = {
+    add_trailing = true,
+    full_name = true,
+    group_empty = false,
+    highlight_git = true,
+    highlight_opened_files = "all",
+  },
+}
+
+if vim.g.i_like_trees == 1 then
+  nvimTreeConfig.open_on_setup = true
+  nvimTreeConfig.open_on_setup_file = true
+  nvimTreeConfig.open_on_tab = true
+end
+
+if vim.g.pretty_icons == 0 then
+  nvimTreeConfig.renderer.icons = {
+    webdev_colors = false,
+    git_placement = "after",
+    glyphs = {
+      default = "",
+      symlink = "",
+      folder = {
+        arrow_closed = "▸",
+        arrow_open = "▾",
+        default = "",
+        open = "",
+        empty = "",
+        empty_open = "",
+        symlink = "",
+        symlink_open = "",
+      },
+      git = {
+        unstaged = "*",
+        staged = "~",
+        unmerged = "",
+        renamed = "->",
+        untracked = "+",
+        deleted = "-",
+        ignored = "",
+      },
+    },
+  }
+end
+
+require("nvim-tree").setup(nvimTreeConfig)
+
+EOF
 
 " Clear gutter bg color
 hi clear SignColumn
@@ -137,6 +200,16 @@ hi clear SignColumn
 " ----- ALE -----
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '▲'
+let g:ale_hover_to_floating_preview = 1
+" Use coc.vim for LSP (perf)
+let g:ale_disable_lsp = 1
+
+
+let g:ale_linters = {
+  \   'javascript': ['eslint'],
+  \   'typescript': ['eslint'],
+  \   'typescriptreact' : ['eslint'],
+  \}
 
 " ----- Telescope settings -----
 nmap <c-p> :Telescope git_files<cr>
@@ -169,6 +242,7 @@ inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
 nmap <silent> gd :PreviewDefinition<CR>
 nmap <silent> gy :PreviewTypeDefinition<CR>
 nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gi <Plug>(coc-implementation)
 
 " Show documentation (\h)
 nnoremap <silent> <leader>h :call <SID>show_documentation()<CR>
@@ -272,11 +346,6 @@ imap <c-q> <esc>:q<cr>a
 " Crtl s to save
 nmap <c-s> :w<cr>
 imap <c-s> <esc>:w<cr>a
-
-" Ctrl v to paste like a normal person (with auto fixing indentation)
-" http://vim.wikia.com/wiki/Format_pasted_text_automatically
-"nmap p p=`]
-"nmap <c-v> p
 
 " Reselect visual paste after shifting block
 " https://vi.stackexchange.com/questions/598/faster-way-to-move-a-block-of-text
