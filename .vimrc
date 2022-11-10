@@ -5,6 +5,8 @@ let g:pretty_icons = 0 " requires https://github.com/ryanoasis/nerd-fonts
 let g:write_on_focusloss = 0 " write when you alt-tab
 let g:write_on_change = 0 " write whenever you change the file (can only be enabled when write_on_focusloss is disabled)
 let g:enable_arrowkeys = 0 " self explanatory
+let g:theme = 'morhetz/gruvbox' " your syntax theme
+let g:theme_name = 'gruvbox' " your syntax theme title (will differ from theme)
 
 " Enable most vim settings
 set nocompatible
@@ -37,7 +39,7 @@ call plug#begin()
 Plug 'itchyny/lightline.vim'
 
 " Color Scheme
-Plug 'morhetz/gruvbox'
+Plug g:theme
 
 " Coc for autocompletion - other coc plugins managed by coc below
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -101,10 +103,12 @@ set signcolumn=yes
 set updatetime=250
 syntax on
 
-" ----- Theme (gruvbox) -----
+" ----- Theme -----
 
+set t_Co=256
+set t_ut=
 let g:gruvbox_contrast_dark = 'hard'
-colorscheme gruvbox
+execute 'colorscheme ' . g:theme_name
 set background=dark
 
 " ----- Lightline -----
