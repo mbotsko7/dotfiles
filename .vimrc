@@ -2,6 +2,8 @@
 let g:lint_all_the_things = 0 " continuous linting
 let g:i_like_trees = 0 " auto-open trees, always
 let g:pretty_icons = 0 " requires https://github.com/ryanoasis/nerd-fonts
+let g:write_on_focusloss = 0 " write when you alt-tab
+let g:write_on_change = 0 " write whenever you change the file (can only be enabled when write_on_focusloss is disabled)
 
 " Enable most vim settings
 set nocompatible
@@ -368,6 +370,14 @@ set noswapfile
 " https://stackoverflow.com/questions/15217354/how-to-make-cursor-change-in-different-modes-in-vim
 autocmd InsertEnter * set cul
 autocmd InsertLeave * set nocul
+
+" Automatically write the file
+if g:write_on_focusloss
+  autocmd FocusLost * nested silent! wall
+elseif g:write_on_change
+  autocmd TextChanged,TextChangedI <buffer> silent write
+endif
+
 
 " Change Vim Cursor Depending on mode:
 " http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes
