@@ -53,6 +53,7 @@ Plug 'editorconfig/editorconfig-vim'
 
 " Syntax Checking and Highlighting
 Plug 'sheerun/vim-polyglot'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Fuzzy finding
 Plug 'nvim-lua/plenary.nvim'
