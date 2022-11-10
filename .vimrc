@@ -122,6 +122,14 @@ let g:lightline = {
       \ },
       \ }
 
+" ----- NERDCommenter -----
+
+" NERDCommenter has a bunch of functionality we don't need
+let g:NERDCreateDefaultMappings = 0
+
+" \c to comment (5\c works, as well as visual selections)
+nmap <silent> <leader>c <plug>NERDCommenterToggle<CR>
+
 " ----- nvim-tree -----
 
 nmap <silent> <leader>t :NvimTreeFindFileToggle<CR>
