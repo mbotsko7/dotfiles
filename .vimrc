@@ -4,6 +4,7 @@ let g:i_like_trees = 0 " auto-open trees, always
 let g:pretty_icons = 0 " requires https://github.com/ryanoasis/nerd-fonts
 let g:write_on_focusloss = 0 " write when you alt-tab
 let g:write_on_change = 0 " write whenever you change the file (can only be enabled when write_on_focusloss is disabled)
+let g:enable_arrowkeys = 0 " self explanatory
 
 " Enable most vim settings
 set nocompatible
@@ -12,15 +13,17 @@ set nocompatible
 set confirm
 
 " Disable arrow keys (force to use hjkl)
-noremap <Up> <Nop>
-noremap <Down> <Nop>
-noremap <Left> <Nop>
-noremap <Right> <Nop>
+if !g:enable_arrowkeys
+  noremap <Up> <Nop>
+  noremap <Down> <Nop>
+  noremap <Left> <Nop>
+  noremap <Right> <Nop>
 
-"noremap! <Up> <Nop>
-"noremap! <Down> <Nop>
-"noremap! <Left> <Nop>
-"noremap! <Right> <Nop>
+  noremap! <Up> <Nop>
+  noremap! <Down> <Nop>
+  noremap! <Left> <Nop>
+  noremap! <Right> <Nop>
+endif
 
 " Force bash as shell (fish/vundle not compatible)
 set shell=/bin/bash
