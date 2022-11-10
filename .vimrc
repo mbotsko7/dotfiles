@@ -316,6 +316,10 @@ nmap <C-RightMouse> <LeftMouse>g<Space>
 imap <C-LeftMouse> <esc><LeftMouse>g<Space>
 imap <C-RightMouse> <esc><LeftMouse>g<Space>
 
+" scroll only one line at a time for smoother scrolling
+map <ScrollWheelUp> <C-Y>
+map <ScrollWheelDown> <C-E>
+
 " ----- Other Settings ----
 
 " Enable vim mouse compat
