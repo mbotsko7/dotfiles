@@ -31,7 +31,3 @@ alias dc "docker-compose"
 funcsave dc
 alias k "kubectl"
 funcsave k
-alias pbcopy='xsel --clipboard --input'
-funcsave pbcopy
-alias pbpaste='xsel --clipboard --output'
-funcsave pbpaste
