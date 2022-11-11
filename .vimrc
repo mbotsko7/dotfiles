@@ -7,6 +7,14 @@ let g:write_on_change = 0 " write whenever you change the file (can only be enab
 let g:enable_arrowkeys = 0 " self explanatory
 let g:theme = 'morhetz/gruvbox' " your syntax theme
 let g:theme_name = 'gruvbox' " your syntax theme title (will differ from theme)
+let g:coc_global_extensions = [
+      \ 'coc-tsserver',
+      \ 'coc-css',
+      \ 'coc-angular',
+      \ 'coc-styled-components',
+      \ 'coc-eslint',
+      \ 'coc-tabnine'
+\ ] " any coc extensions that should be installed
 
 " Enable most vim settings
 set nocompatible
@@ -250,7 +258,6 @@ require('telescope').setup{
 EOF
 
 " ----- CoC settings -----
-let g:coc_global_extensions = ['coc-tsserver', 'coc-css', 'coc-angular']
 
 " Tab completion
 inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
