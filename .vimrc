@@ -1,4 +1,4 @@
-" Quick customizations
+" ----- Quick customizations -----
 let g:lint_all_the_things = 0 " continuous linting
 let g:i_like_trees = 0 " auto-open trees, always
 let g:pretty_icons = 0 " requires https://github.com/ryanoasis/nerd-fonts
@@ -15,6 +15,9 @@ let g:coc_global_extensions = [
       \ 'coc-eslint',
       \ 'coc-tabnine'
 \ ] " any coc extensions that should be installed
+
+" ----- End quick customizations -----
+
 
 " Enable most vim settings
 set nocompatible
