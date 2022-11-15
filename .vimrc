@@ -152,7 +152,7 @@ let g:lightline = {
 let g:NERDCreateDefaultMappings = 0
 
 " \c to comment (5\c works, as well as visual selections)
-nmap <silent> <leader>c <plug>NERDCommenterToggle<CR>
+map <silent> <leader>c <plug>NERDCommenterToggle<CR>
 
 " ----- nvim-tree -----
 
