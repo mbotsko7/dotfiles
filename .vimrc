@@ -76,6 +76,7 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 
+" Easy editing movements for quotes, parenthesis, etc
 Plug 'tpope/vim-surround'
 
 " Global find and replace
@@ -86,6 +87,10 @@ Plug 'preservim/nerdcommenter'
 
 " Multiline Editing
 Plug 'mg979/vim-visual-multi'
+
+" Debugger
+Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
 
 " Linting
 if g:lint_all_the_things
@@ -225,6 +230,135 @@ EOF
 
 " Clear gutter bg color
 hi clear SignColumn
+
+" ----- DAP -----
+
+lua <<EOF
+      local dap = require('dap')
+      dap.adapters.node2 = {
+        type = 'executable',
+        command = 'node',
+        args = {os.getenv('HOME') .. '/dev/microsoft/vscode-node-debug2/out/src/nodeDebug.js'},
+      }
+      dap.configurations.javascript = {
+        {
+          name = 'Launch',
+          type = 'node2',
+          request = 'launch',
+          program = '${file}',
+          cwd = vim.fn.getcwd(),
+          sourceMaps = true,
+          protocol = 'inspector',
+          console = 'integratedTerminal',
+        },
+        {
+          -- For this to work you need to make sure the node process is started with the `--inspect` flag.
+          name = 'Attach to process',
+          type = 'node2',
+          request = 'attach',
+          processId = require'dap.utils'.pick_process,
+        },
+      }
+      dap.configurations.typescript = {
+        {
+          name = 'Launch',
+          type = 'node2',
+          request = 'launch',
+          program = '${file}',
+          cwd = vim.fn.getcwd(),
+          sourceMaps = true,
+          protocol = 'inspector',
+          console = 'integratedTerminal',
+        },
+        {
+          -- For this to work you need to make sure the node process is started with the `--inspect` flag.
+          name = 'Attach to process',
+          type = 'node2',
+          request = 'attach',
+          host = function()
+          local value = vim.fn.input "Host [127.0.0.1]: "
+          if value ~= "" then
+                return value
+                end
+                return "127.0.0.1"
+          end,
+          port = function()
+                local val = tonumber(vim.fn.input("Port: ", "54321"))
+                assert(val, "Please provide a port number")
+                return val
+          end,
+        },
+      }
+
+      require("dapui").setup({
+        icons = { expanded = "▾", collapsed = "▸", current_frame = "▸" },
+        mappings = {
+          -- Use a table to apply multiple mappings
+          expand = { "<CR>", "<2-LeftMouse>" },
+          open = "o",
+          remove = "d",
+          edit = "e",
+          repl = "r",
+          toggle = "t",
+        },
+        -- Expand lines larger than the window
+        -- Requires >= 0.7
+        expand_lines = vim.fn.has("nvim-0.7"),
+        -- Layouts define sections of the screen to place windows.
+        -- The position can be "left", "right", "top" or "bottom".
+        -- The size specifies the height/width depending on position. It can be an Int
+        -- or a Float. Integer specifies height/width directly (i.e. 20 lines/columns) while
+        -- Float value specifies percentage (i.e. 0.3 - 30% of available lines/columns)
+        -- Elements are the elements shown in the layout (in order).
+        -- Layouts are opened in order so that earlier layouts take priority in window sizing.
+        layouts = {
+          {
+            elements = {
+            -- Elements can be strings or table with id and size keys.
+              { id = "scopes", size = 0.25 },
+              "breakpoints",
+              "stacks",
+              "watches",
+            },
+            size = 40, -- 40 columns
+            position = "left",
+          },
+          {
+            elements = {
+              "repl",
+              "console",
+            },
+            size = 0.25, -- 25% of total lines
+            position = "bottom",
+          },
+        },
+        floating = {
+          max_height = nil, -- These can be integers or a float between 0 and 1.
+          max_width = nil, -- Floats will be treated as percentage of your screen.
+          border = "single", -- Border style. Can be "single", "double" or "rounded"
+          mappings = {
+            close = { "q", "<Esc>" },
+          },
+        },
+        windows = { indent = 1 },
+        render = {
+          max_type_length = nil, -- Can be integer or nil.
+          max_value_lines = 100, -- Can be integer or nil.
+        }
+      })
+EOF
+
+nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
+nnoremap <silent> <F10> <Cmd>lua require'dap'.step_over()<CR>
+nnoremap <silent> <F11> <Cmd>lua require'dap'.step_into()<CR>
+nnoremap <silent> <F12> <Cmd>lua require'dap'.step_out()<CR>
+nnoremap <silent> <Leader>b <Cmd>lua require'dap'.toggle_breakpoint()<CR>
+nnoremap <silent> <Leader>B <Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
+nnoremap <silent> <Leader>lp <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
+nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
+nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
+nnoremap <silent> <Leader>dt <Cmd>lua require'dapui'.toggle()<CR>
+
 
 " ----- ALE -----
 let g:ale_set_highlights = 0
