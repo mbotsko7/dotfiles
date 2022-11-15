@@ -5,7 +5,7 @@ let g:pretty_icons = 0 " requires https://github.com/ryanoasis/nerd-fonts
 let g:write_on_focusloss = 0 " write when you alt-tab
 let g:write_on_change = 0 " write whenever you change the file (can only be enabled when write_on_focusloss is disabled)
 let g:enable_arrowkeys = 0 " self explanatory
-let g:use_inline_definition_previews = 0 " goto-definition previews like VSCode
+let g:use_inline_definition_previews = 0 " goto-definition previews like VSCode by default
 let g:theme = 'morhetz/gruvbox' " your syntax theme
 let g:theme_name = 'gruvbox' " your syntax theme title (will differ from theme)
 let g:coc_global_extensions = [
@@ -406,9 +406,13 @@ inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
 if g:use_inline_definition_previews
   nmap <silent> gd :PreviewDefinition<CR>
   nmap <silent> gy :PreviewTypeDefinition<CR>
+  nmap <silent> <leader>gd <Plug>(coc-definition)
+  nmap <silent> <leader>gy <Plug>(coc-type-definition)
 else
   nmap <silent> gd <Plug>(coc-definition)
   nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> <leader>gd :PreviewDefinition<CR>
+  nmap <silent> <leader>gy :PreviewTypeDefinition<CR>
 endif
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> gi <Plug>(coc-implementation)
