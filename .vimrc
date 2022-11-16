@@ -14,7 +14,8 @@ let g:coc_global_extensions = [
       \ 'coc-angular',
       \ 'coc-styled-components',
       \ 'coc-eslint',
-      \ 'coc-tabnine'
+      \ 'coc-tabnine',
+      \ 'coc-rust-analyzer',
 \ ] " any coc extensions that should be installed
 
 " ----- End quick customizations -----
