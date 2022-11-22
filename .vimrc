@@ -12,7 +12,6 @@ let g:coc_global_extensions = [
       \ 'coc-tsserver',
       \ 'coc-css',
       \ 'coc-angular',
-      \ 'coc-styled-components',
       \ 'coc-eslint',
       \ 'coc-tabnine',
       \ 'coc-rust-analyzer',
