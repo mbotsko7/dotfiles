@@ -177,6 +177,7 @@ nvimTreeConfig = {
       list = {
         { key = "%", action = "vsplit" },
         { key = "\"", action = "split" },
+        { key = "<C-e>", action = "" },
       },
     },
   },
