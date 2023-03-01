@@ -125,7 +125,7 @@ syntax on
 set t_Co=256
 set t_ut=
 let g:gruvbox_contrast_dark = 'hard'
-execute 'colorscheme ' . g:theme_name
+silent! execute 'colorscheme ' . g:theme_name
 set background=dark
 
 " ----- Lightline -----
@@ -226,7 +226,10 @@ if vim.g.pretty_icons == 0 then
   }
 end
 
-require("nvim-tree").setup(nvimTreeConfig)
+local ok, lib = pcall(require, 'nvim-tree')
+if ok then
+  lib.setup(nvimTreeConfig)
+end
 
 EOF
 
@@ -236,7 +239,8 @@ hi clear SignColumn
 " ----- DAP -----
 
 lua <<EOF
-      local dap = require('dap')
+local ok, dap = pcall(require, 'dap')
+if ok then
       dap.adapters.node2 = {
         type = 'executable',
         command = 'node',
@@ -291,6 +295,7 @@ lua <<EOF
           end,
         },
       }
+end
 EOF
 
 nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
@@ -325,18 +330,21 @@ nmap <c-p> :Telescope git_files<cr>
 nmap <c-f> :Telescope live_grep<cr>
 
 lua << EOF
-require('telescope').setup{
-  defaults = {
-    mappings = {
-      n = {
-        ["<CR>"] = 'select_tab',
-      },
-      i = {
-        ["<CR>"] = 'select_tab',
+local ok, telescope = pcall(require, 'telescope')
+if ok then
+  telescope.setup{
+    defaults = {
+      mappings = {
+        n = {
+          ["<CR>"] = 'select_tab',
+        },
+        i = {
+          ["<CR>"] = 'select_tab',
+        },
       },
     },
-  },
-}
+  }
+end
 EOF
 
 " ----- CoC settings -----
