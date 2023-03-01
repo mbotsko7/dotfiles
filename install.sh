@@ -35,7 +35,7 @@ pip3 install pynvim
 sudo apt install ripgrep -y
 sudo apt install fd-find -y
 
-#nvim +PlugInstall +qall
+nvim +PlugInstall +qall
 
 # Tmux
 sudo apt install tmux -y
