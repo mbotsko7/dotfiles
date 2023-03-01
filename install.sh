@@ -25,8 +25,8 @@ mkdir -p $HOME/nvim
 sudo apt install -y wget
 wget https://raw.githubusercontent.com/julianpoy/dotfiles/master/.vimrc -O $HOME/nvim/init.vim
 
-fish -c "sudo npm install -g yarn"
-fish -c "sudo npm install -g neovim"
+fish -c "npm install -g yarn"
+fish -c "npm install -g neovim"
 
 sudo apt install python3 -y
 pip3 install pynvim
