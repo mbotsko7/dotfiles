@@ -19,11 +19,9 @@ fish -c "set --universal nvm_default_version 18"
 fish -c "set --universal nvm_default_packages yarn neovim"
 
 # NeoVim
-sudo apt install libfuse2 -y
-wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage -O $HOME/nvim.appimage
-chmod u+x $HOME/nvim.appimage
-fish -c "alias nvim='~/nvim.appimage' && funcsave nvim"
-fish -c "alias vim='~/nvim.appimage' && funcsave vim"
+wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.deb -O /tmp/nvim.deb
+sudo apt install /tmp/nvim.deb -y
+fish -c "alias vim='nvim' && funcsave vim"
 
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
@@ -36,6 +34,8 @@ pip3 install pynvim
 
 sudo apt install ripgrep -y
 sudo apt install fd-find -y
+
+#nvim +PlugInstall +qall
 
 # Tmux
 sudo apt install tmux -y
