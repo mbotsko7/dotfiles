@@ -13,6 +13,7 @@ fish -c "fisher install oh-my-fish/bobthefish"
 fish -c "fisher install jorgebucaran/nvm.fish"
 fish -c "nvm install 18"
 fish -c "set --universal nvm_default_version 18"
+fish -c "set --universal nvm_default_packages yarn neovim"
 
 # NeoVim
 sudo apt install neovim -y
@@ -24,9 +25,6 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
 mkdir -p $HOME/nvim
 sudo apt install -y wget
 wget https://raw.githubusercontent.com/julianpoy/dotfiles/master/.vimrc -O $HOME/nvim/init.vim
-
-fish -c "npm install -g yarn"
-fish -c "npm install -g neovim"
 
 sudo apt install python3 -y
 pip3 install pynvim
