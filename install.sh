@@ -39,4 +39,5 @@ nvim --headless +PlugInstall +qall
 
 # Tmux
 sudo apt install tmux -y
+wget https://raw.githubusercontent.com/julianpoy/dotfiles/master/.tmux.conf -O $HOME/.tmux.conf
 
