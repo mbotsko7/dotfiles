@@ -11,7 +11,7 @@ fish -c "fisher install oh-my-fish/bobthefish"
 
 # NVM
 fish -c "fisher install jorgebucaran/nvm.fish"
-fish -c "nvm install 16"
+fish -c "set --universal nvm_default_version v18"
 
 # NeoVim
 sudo apt install neovim -y
