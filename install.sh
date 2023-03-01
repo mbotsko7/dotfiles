@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo apt install -y wget
+
 # Fish
 sudo apt-add-repository ppa:fish-shell/release-3 -y
 sudo apt update
@@ -16,14 +18,15 @@ fish -c "set --universal nvm_default_version 18"
 fish -c "set --universal nvm_default_packages yarn neovim"
 
 # NeoVim
-sudo apt install neovim -y
-fish -c "alias vim='nvim' && funcsave vim"
+wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage -O $HOME/nvim.appimage
+chmod u+x $HOME/nvim.appimage
+fish -c "alias nvim='~/nvim.appimage' && funcsave nvim"
+fish -c "alias vim='~/nvim.appimage' && funcsave vim"
 
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
 mkdir -p $HOME/.config/nvim
-sudo apt install -y wget
 wget https://raw.githubusercontent.com/julianpoy/dotfiles/master/.vimrc -O $HOME/.config/nvim/init.vim
 
 sudo apt install python3 -y
