@@ -22,9 +22,9 @@ fish -c "alias vim='nvim' && funcsave vim"
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
-mkdir -p $HOME/nvim
+mkdir -p $HOME/.config/nvim
 sudo apt install -y wget
-wget https://raw.githubusercontent.com/julianpoy/dotfiles/master/.vimrc -O $HOME/nvim/init.vim
+wget https://raw.githubusercontent.com/julianpoy/dotfiles/master/.vimrc -O $HOME/.config/nvim/init.vim
 
 sudo apt install python3 -y
 pip3 install pynvim
