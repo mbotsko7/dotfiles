@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Wget for various fetching
 sudo apt install -y wget
 
 # Fish
@@ -18,6 +19,7 @@ fish -c "set --universal nvm_default_version 18"
 fish -c "set --universal nvm_default_packages yarn neovim"
 
 # NeoVim
+sudo apt install libfuse2 -y
 wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage -O $HOME/nvim.appimage
 chmod u+x $HOME/nvim.appimage
 fish -c "alias nvim='~/nvim.appimage' && funcsave nvim"
