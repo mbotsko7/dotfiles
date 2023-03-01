@@ -10,7 +10,7 @@ sudo apt install fish -y
 sudo apt install fonts-powerline -y
 sudo chsh -s /usr/bin/fish $USER
 fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
-fish -c "fisher install oh-my-fish/bobthefish"
+fish -c "fisher install oh-my-fish/theme-bobthefish"
 
 # NVM
 fish -c "fisher install jorgebucaran/nvm.fish"
