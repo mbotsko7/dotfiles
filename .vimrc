@@ -1,13 +1,13 @@
 " ----- Quick customizations -----
-let g:lint_all_the_things = 0 " continuous linting
+let g:lint_all_the_things = 1 " continuous linting
 let g:i_like_trees = 0 " auto-open trees, always
 let g:pretty_icons = 0 " requires https://github.com/ryanoasis/nerd-fonts
-let g:write_on_focusloss = 0 " write when you alt-tab
+let g:write_on_focusloss = 1 " write when you alt-tab
 let g:write_on_change = 0 " write whenever you change the file (can only be enabled when write_on_focusloss is disabled)
-let g:enable_arrowkeys = 0 " self explanatory
+let g:enable_arrowkeys = 1 "self explanatory
 let g:use_inline_definition_previews = 0 " goto-definition previews like VSCode by default
-let g:theme = 'morhetz/gruvbox' " your syntax theme
-let g:theme_name = 'gruvbox' " your syntax theme title (will differ from theme)
+let g:theme = 'tomasiser/vim-code-dark' " your syntax theme
+let g:theme_name = 'codedark' " your syntax theme title (will differ from theme)
 let g:coc_global_extensions = [
       \ 'coc-tsserver',
       \ 'coc-css',
