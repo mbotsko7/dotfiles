@@ -43,3 +43,6 @@ nvim --headless +PlugInstall +qall
 sudo apt install tmux -y
 wget https://raw.githubusercontent.com/julianpoy/dotfiles/master/.tmux.conf -O $HOME/.tmux.conf
 
+# Other Utils
+sudo apt install netcat -y
+
