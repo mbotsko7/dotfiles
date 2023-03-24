@@ -11,7 +11,7 @@ sudo apt install fonts-powerline -y
 sudo chsh -s /usr/bin/fish $USER
 fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
 fish -c "fisher install oh-my-fish/theme-bobthefish"
-wget https://raw.githubusercontent.com/julianpoy/dotfiles/master/fish-aliases.sh -O /tmp/fish-aliases.sh
+wget $DOTFILES_URI/raw/master/fish-aliases.sh -O /tmp/fish-aliases.sh
 fish -c "fish /tmp/fish-aliases.sh"
 
 # NVM
@@ -29,7 +29,7 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
 mkdir -p $HOME/.config/nvim
-wget https://raw.githubusercontent.com/julianpoy/dotfiles/master/.vimrc -O $HOME/.config/nvim/init.vim
+wget $DOTFILES_URI/raw/master/.vimrc -O $HOME/.config/nvim/init.vim
 
 sudo apt install python3 -y
 pip3 install pynvim
@@ -41,7 +41,7 @@ nvim --headless +PlugInstall +qall
 
 # Tmux
 sudo apt install tmux -y
-wget https://raw.githubusercontent.com/julianpoy/dotfiles/master/.tmux.conf -O $HOME/.tmux.conf
+wget $DOTFILES_URI/raw/master/.tmux.conf -O $HOME/.tmux.conf
 
 # Other Utils
 sudo apt install netcat -y
