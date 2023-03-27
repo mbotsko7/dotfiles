@@ -8,17 +8,21 @@ let g:enable_arrowkeys = 0 " self explanatory
 let g:use_inline_definition_previews = 0 " goto-definition previews like VSCode by default
 let g:theme = 'morhetz/gruvbox' " your syntax theme
 let g:theme_name = 'gruvbox' " your syntax theme title (will differ from theme)
+let g:copilot = 1 " github copilot (paid, but has no effect if not activated)
+let g:tabnine = 0 " tabnine AI autocompletion (free, doesn't play super well with copilot and is lower quality)
 let g:coc_global_extensions = [
       \ 'coc-tsserver',
       \ 'coc-css',
       \ 'coc-angular',
       \ 'coc-eslint',
-      \ 'coc-tabnine',
       \ 'coc-rust-analyzer',
 \ ] " any coc extensions that should be installed
 
 " ----- End quick customizations -----
 
+if g:tabnine
+  let g:coc_global_extensions = g:coc_global_extensions + ['coc-tabnine']
+endif
 
 " Enable most vim settings
 set nocompatible
@@ -98,6 +102,10 @@ if g:lint_all_the_things
   Plug 'dense-analysis/ale'
 endif
 
+if g:copilot
+  Plug 'github/copilot.vim'
+endif
+
 call plug#end()
 
 filetype plugin indent on
@@ -154,6 +162,17 @@ let g:NERDCreateDefaultMappings = 0
 
 " \c to comment (5\c works, as well as visual selections)
 map <silent> <leader>c <plug>NERDCommenterToggle<CR>
+
+" ----- copilot ------
+if g:copilot
+  " Enable both <C-J> and <C-CR> for accepting suggestions
+  " (some terminals don't pass <C-CR> through)
+  imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+  imap <silent><script><expr> <C-CR> copilot#Accept("\<CR>")
+
+  " Copilot uses tab for autocompletion which conflicts with CoC
+  let g:copilot_no_tab_map = v:true
+endif
 
 " ----- nvim-tree -----
 
