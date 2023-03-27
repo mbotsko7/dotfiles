@@ -342,6 +342,7 @@ let g:ale_linters = {
   \   'javascript': ['eslint'],
   \   'typescript': ['eslint'],
   \   'typescriptreact' : ['eslint'],
+  \   'rust' : ['analyzer'],
   \}
 
 " ----- Telescope settings -----
