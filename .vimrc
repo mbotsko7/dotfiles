@@ -413,6 +413,11 @@ command! -nargs=+ CocOpenPreviewInline :call OpenPreviewInline(<f-args>)
 command! -nargs=0 PreviewDefinition :call CocActionAsync('jumpDefinition', 'CocOpenPreviewInline')
 command! -nargs=0 PreviewTypeDefinition :call CocActionAsync('jumpTypeDefinition', 'CocOpenPreviewInline')
 
+let g:coc_user_config = {
+  \ 'suggest.noselect': 1,
+  \ 'diagnostic.displayByAle': g:lint_all_the_things,
+  \ }
+
 " BG for inline previews
 "hi Pmenu ctermbg=233 guibg=#1d2021
 
