@@ -1,5 +1,5 @@
 " ----- Quick customizations -----
-let g:lint_all_the_things = 0 " continuous linting
+let g:eslint = 1 " enables eslint popups
 let g:i_like_trees = 0 " auto-open trees, always
 let g:pretty_icons = 0 " requires https://github.com/ryanoasis/nerd-fonts
 let g:write_on_focusloss = 0 " write when you alt-tab
@@ -8,20 +8,23 @@ let g:enable_arrowkeys = 0 " self explanatory
 let g:use_inline_definition_previews = 0 " goto-definition previews like VSCode by default
 let g:theme = 'morhetz/gruvbox' " your syntax theme
 let g:theme_name = 'gruvbox' " your syntax theme title (will differ from theme)
-let g:copilot = 1 " github copilot (paid, but has no effect if not activated)
+let g:copilot = 0 " github copilot (paid, but has no effect if not activated)
 let g:tabnine = 0 " tabnine AI autocompletion (free, doesn't play super well with copilot and is lower quality)
-let g:coc_global_extensions = [
-      \ 'coc-tsserver',
-      \ 'coc-css',
-      \ 'coc-angular',
-      \ 'coc-eslint',
-      \ 'coc-rust-analyzer',
+let g:coc_extensions = [
+      \ 'neoclide/coc-tsserver',
+      \ 'neoclide/coc-css',
+      \ 'iamcco/coc-angular',
+      \ 'fannheyward/coc-rust-analyzer',
 \ ] " any coc extensions that should be installed
 
 " ----- End quick customizations -----
 
 if g:tabnine
-  let g:coc_global_extensions = g:coc_global_extensions + ['coc-tabnine']
+  let g:coc_extensions = g:coc_extensions + ['neoclide/coc-tabnine']
+endif
+
+if g:eslint
+  let g:coc_extensions = g:coc_extensions + ['neoclide/coc-eslint']
 endif
 
 " Enable most vim settings
@@ -59,6 +62,9 @@ Plug g:theme
 
 " Coc for autocompletion - other coc plugins managed by coc below
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+for extension in g:coc_extensions
+    Plug ''.extension, {'do': 'yarn install --frozen-lockfile'}
+endfor
 
 " File Tree
 if g:pretty_icons
@@ -96,11 +102,6 @@ Plug 'mg979/vim-visual-multi'
 " Debugger
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
-
-" Linting
-if g:lint_all_the_things
-  Plug 'dense-analysis/ale'
-endif
 
 if g:copilot
   Plug 'github/copilot.vim'
@@ -328,23 +329,6 @@ nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
 nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
 nnoremap <silent> <Leader>dt <Cmd>lua require'dapui'.toggle()<CR>
 
-
-" ----- ALE -----
-let g:ale_set_highlights = 0
-let g:ale_sign_error = '✘'
-let g:ale_sign_warning = '▲'
-let g:ale_hover_to_floating_preview = 1
-" Use coc.vim for LSP (perf)
-let g:ale_disable_lsp = 1
-
-
-let g:ale_linters = {
-  \   'javascript': ['eslint'],
-  \   'typescript': ['eslint'],
-  \   'typescriptreact' : ['eslint'],
-  \   'rust' : ['analyzer'],
-  \}
-
 " ----- Telescope settings -----
 nmap <c-p> :Telescope git_files<cr>
 nmap <c-f> :Telescope live_grep<cr>
@@ -435,7 +419,6 @@ command! -nargs=0 PreviewTypeDefinition :call CocActionAsync('jumpTypeDefinition
 
 let g:coc_user_config = {
   \ 'suggest.noselect': 1,
-  \ 'diagnostic.displayByAle': g:lint_all_the_things,
   \ }
 
 " BG for inline previews
