@@ -94,7 +94,7 @@ Plug 'tpope/vim-surround'
 Plug 'windwp/nvim-spectre'
 
 " Comment blocks
-Plug 'preservim/nerdcommenter'
+Plug 'tpope/vim-commentary'
 
 " Multiline Editing
 Plug 'mg979/vim-visual-multi'
@@ -155,14 +155,6 @@ let g:lightline = {
       \   'gitbranch': 'FugitiveHead'
       \ },
       \ }
-
-" ----- NERDCommenter -----
-
-" NERDCommenter has a bunch of functionality we don't need
-let g:NERDCreateDefaultMappings = 0
-
-" \c to comment (5\c works, as well as visual selections)
-map <silent> <leader>c <plug>NERDCommenterToggle<CR>
 
 " ----- copilot ------
 if g:copilot
