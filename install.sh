@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Wget for various fetching
-sudo apt install -y wget
+sudo apt install -y wget curl
 
 # Fish
 sudo apt-add-repository ppa:fish-shell/release-3 -y
@@ -21,7 +21,7 @@ fish -c "set --universal nvm_default_version 18"
 fish -c "set --universal nvm_default_packages yarn neovim"
 
 # NeoVim
-wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.deb -O /tmp/nvim.deb
+wget https://github.com/neovim/neovim/releases/download/v0.8.3/nvim-linux64.deb -O /tmp/nvim.deb
 sudo apt install /tmp/nvim.deb -y
 fish -c "alias vim='nvim' && funcsave vim"
 
