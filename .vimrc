@@ -3,13 +3,13 @@ let g:eslint = 1 " enables eslint popups
 let g:i_like_trees = 0 " auto-open trees, always
 let g:pretty_icons = 0 " requires https://github.com/ryanoasis/nerd-fonts
 let g:write_on_focusloss = 0 " write when you alt-tab
-let g:write_on_change = 0 " write whenever you change the file (can only be enabled when write_on_focusloss is disabled)
-let g:enable_arrowkeys = 0 " self explanatory
+let g:write_on_change = 1 " write whenever you change the file (can only be enabled when write_on_focusloss is disabled)
+let g:enable_arrowkeys = 1 " self explanatory
 let g:use_inline_definition_previews = 0 " goto-definition previews like VSCode by default
-let g:theme = 'morhetz/gruvbox' " your syntax theme
-let g:theme_name = 'gruvbox' " your syntax theme title (will differ from theme)
+let g:theme = 'tomasiser/vim-code-dark' " your syntax theme
+let g:theme_name = 'codedark' " your syntax theme title (will differ from theme)
 let g:copilot = 0 " github copilot (paid, but has no effect if not activated)
-let g:tabnine = 0 " tabnine AI autocompletion (free, doesn't play super well with copilot and is lower quality)
+let g:tabnine = 1 " tabnine AI autocompletion (free, doesn't play super well with copilot and is lower quality)
 let g:coc_extensions = [
       \ 'neoclide/coc-tsserver',
       \ 'neoclide/coc-css',
